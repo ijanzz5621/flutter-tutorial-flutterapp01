@@ -1,16 +1,27 @@
-# tutorial_app01
+Title:
+The Ultimate Flutter Tutorial for Beginners - 2025 Full Course
 
-A new Flutter project.
+Link:
+https://www.youtube.com/watch?v=3kaGC_DrUnw
 
-## Getting Started
+Stop At:
+2:30:42 - Card Widget
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Topic Covered: - Widget in widget in widget - Container - Column - Row - Center - Images - Extensions - Stack - Padding Widget - only for padding purpose - SizedBox - only got height and width - Icon - AppBar -> leading - ListTile - OnTap to add function - Wrap - Master Layout - Scaffold - AppBar - NavigationBar - FloatingActionButton - Drawer - SafeArea - Fix Bug - State
+○ Stateful
+○ Stateless
+○ SetState - Split Widget - Widget Tree - Value Notifier - Text Field - Text Editing Controller - Checkbox - Switch - SwitchListTile - SwitchListTile.adaptive - follow iphone or android style - Slider - SingleChildScrollView - GestureDetector - InkWell - Same like GestureDetector, Splash effect - Buttons
+○ Elevated
+○ Filled
+○ Text
+○ Outline
+○ Close
+○ Back
+○ Dropdown - Navigation Routing
+○ Push
+○ Pop
+○ PushReplacement
+§ push and remove prev page
+§ Useful for eg: login page - Send data through pages - Clean UI Widget
+○ ClipRRect - radius border - Hero
+○ Transition widget from page to page - SnackBar - Alert - Divider - Card

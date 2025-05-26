@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_app01/data/notifiers.dart';
-import 'package:tutorial_app01/views/widget_tree.dart';
+import 'package:tutorial_app01/views/pages/welcome_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,12 +23,12 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.teal,
+              seedColor: Colors.blueAccent,
               brightness: isDarkMode ? Brightness.dark : Brightness.light,
               contrastLevel: 0.5,
             ),
           ),
-          home: WidgetTree(),
+          home: WelcomePage(),
         );
       },
     );

@@ -8,7 +8,7 @@
 
 # Stop At:
 
-## 2:33:38 - Card Widget
+## 2:43:18 - FittedBox
 
 # Topic Covered:
 
@@ -151,3 +151,7 @@
 ## Card
 
 ## Text
+
+## Lottie Animation
+
+## FittedBox

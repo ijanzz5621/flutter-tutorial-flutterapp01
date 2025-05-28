@@ -14,6 +14,11 @@ class WelcomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             HeroWidget(),
+            Text(
+              'Welcome to Sharizan App',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+            ),
+            SizedBox(height: 20.0),
             FilledButton(
               onPressed: () {
                 Navigator.pushReplacement(

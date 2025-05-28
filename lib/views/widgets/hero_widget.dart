@@ -12,15 +12,15 @@ class HeroWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.0),
         child: Stack(
           children: [
-            Image.asset(
-              'assets/images/image01.jpg',
-              width: double.infinity,
-              height: 300.0,
-              fit: BoxFit.cover,
-              color: Colors.teal,
-              colorBlendMode: BlendMode.darken,
-            ),
-            Lottie.asset('assets/lotties/home-anim.json'),
+            // Image.asset(
+            //   'assets/images/image01.jpg',
+            //   width: double.infinity,
+            //   height: 300.0,
+            //   fit: BoxFit.cover,
+            //   color: Colors.teal,
+            //   colorBlendMode: BlendMode.darken,
+            // ),
+            Lottie.asset('assets/lotties/map-logo-anim.json', height: 400.0),
           ],
         ),
       ),

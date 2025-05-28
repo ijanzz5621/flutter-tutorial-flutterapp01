@@ -8,7 +8,7 @@
 
 # Stop At:
 
-## 2:43:18 - FittedBox
+## 2:47:45 - Local Data
 
 # Topic Covered:
 
@@ -155,3 +155,7 @@
 ## Lottie Animation
 
 ## FittedBox
+
+#### Can solve screen overflow
+
+## Local Data Saving

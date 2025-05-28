@@ -13,11 +13,17 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            HeroWidget(),
-            Text(
-              'Welcome to Sharizan App',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+            FittedBox(
+              child: Text(
+                'MILOCA',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 50.0,
+                  letterSpacing: 30.0,
+                ),
+              ),
             ),
+            HeroWidget(),
             SizedBox(height: 20.0),
             FilledButton(
               onPressed: () {
@@ -32,6 +38,28 @@ class WelcomePage extends StatelessWidget {
                   ),
                 );
               },
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50.0),
+                backgroundColor: Colors.teal,
+              ),
+              child: Text('Get Started'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    fullscreenDialog: false,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return const WidgetTree();
+                    },
+                  ),
+                );
+              },
+              style: TextButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50.0),
+              ),
               child: Text('Log In'),
             ),
           ],

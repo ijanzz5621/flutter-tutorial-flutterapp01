@@ -1,5 +1,5 @@
 name: tutorial_app01
-description: "A new Flutter project."
+description: "Applicaton that use google maps where user can mark any place and add some information about it. It is possible to add photos, videos, and audio files to the place. The application is designed for people who want to share their experiences with others."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_fonts: ^6.2.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -39,13 +40,25 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.3
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon" # Generates icons for Android. You can also use `true` for default 'ic_launcher'.
+  ios: false # Set to true if you also want to generate iOS icons
+  image_path: "assets/images/miloca.png" # Path to your source image
+  # Optional: For Android adaptive icons (recommended for Android 8.0+):
+  # If you have a separate foreground (e.g., just the marker) and background (e.g., just the map) image:
+  # adaptive_icon_background: "#008080" # A solid color (e.g., your teal) or path to a background image
+  # adaptive_icon_foreground: "assets/images/app_icon_foreground.png" # Path to your foreground image
+  min_sdk_android: 21 # Set this to your app's minimum Android SDK version
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

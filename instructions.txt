@@ -1,0 +1,25 @@
+1. How to generate own icon:
+============================
+
+    - Add flutter_launcher_icons: "<version>" to dev_dependencies in pubspec.yaml
+
+    - Add below content in the same file:
+
+        flutter_launcher_icons:
+            android: "launcher_icon" # Generates icons for Android. You can also use `true` for default 'ic_launcher'.
+            ios: false # Set to true if you also want to generate iOS icons
+            image_path: "assets/images/app_icon.png" # Path to your source image
+            # Optional: For Android adaptive icons (recommended for Android 8.0+):
+            # If you have a separate foreground (e.g., just the marker) and background (e.g., just the map) image:
+            # adaptive_icon_background: "#008080" # A solid color (e.g., your teal) or path to a background image
+            # adaptive_icon_foreground: "assets/images/app_icon_foreground.png" # Path to your foreground image
+            min_sdk_android: 21 # Set this to your app's minimum Android SDK version
+
+    - save the yaml
+
+    - run below commands:
+
+        flutter pub get
+        dart run flutter_launcher_icons:main
+
+

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorial_app01/views/widget_tree.dart';
-import 'package:tutorial_app01/views/widgets/hero_widget.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});

@@ -20,10 +20,6 @@ class _MapExamplePageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Map Example'),
-        backgroundColor: Colors.teal,
-      ),
       body: FlutterMap(
         // Map Options
         options: MapOptions(

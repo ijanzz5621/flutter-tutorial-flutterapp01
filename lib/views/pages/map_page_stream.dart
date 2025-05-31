@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,43 +15,40 @@ class _MapPageStreamState extends State<MapPageStream> {
   LatLng? _currentPosition;
   bool _isLoadingLocation = true;
   String? _locationAcquisitionError;
-
-  // Stream subscription to listen for continuous location updates
+  static const double _defaultZoomLevel = 18.0;
   StreamSubscription<Position>? _positionStreamSubscription;
 
-  // Initial camera position (e.g., center of Malaysia)
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(4.2105, 101.9758), // Center of Malaysia
-    zoom: 7.0,
+    target: LatLng(4.2105, 101.9758),
+    zoom: _defaultZoomLevel,
   );
 
-  // Example "lake" position for the FAB
-  static const CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
-  );
+  Marker? _userLocationMarker;
+  BitmapDescriptor? _personIcon;
 
   @override
   void initState() {
     super.initState();
-    _startLocationUpdates(); // Start listening for location updates
+    _loadCustomIcon();
+    _startLocationUpdates();
+  }
+
+  Future<void> _loadCustomIcon() async {
+    _personIcon = await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(48, 48)),
+      'assets/images/person-marker-icon.png',
+    );
   }
 
   @override
   void dispose() {
-    _positionStreamSubscription
-        ?.cancel(); // Cancel the stream to prevent memory leaks
+    _positionStreamSubscription?.cancel();
     super.dispose();
   }
 
-  // Helper to show SnackBars
   void _showSnackbar(String message, {bool isError = false}) {
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).removeCurrentSnackBar(); // Remove previous snackbar
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
@@ -63,8 +59,6 @@ class _MapPageStreamState extends State<MapPageStream> {
     }
   }
 
-  // Ensures location services are enabled and permissions are granted.
-  // Throws an Exception if checks fail.
   Future<void> _ensureLocationPermissions() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -75,20 +69,15 @@ class _MapPageStreamState extends State<MapPageStream> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw Exception(
-          'Location permissions were denied. Please grant them to use this feature.',
-        );
+        throw Exception('Location permissions were denied.');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw Exception(
-        'Location permissions are permanently denied. Please enable them in app settings.',
-      );
+      throw Exception('Location permissions are permanently denied.');
     }
   }
 
-  // Starts listening for continuous location updates
   Future<void> _startLocationUpdates() async {
     setState(() {
       _isLoadingLocation = true;
@@ -98,15 +87,9 @@ class _MapPageStreamState extends State<MapPageStream> {
     try {
       await _ensureLocationPermissions();
 
-      // Define location settings for continuous updates
-      // This is crucial for performance:
-      // - accuracy: high for precise tracking
-      // - distanceFilter: only get updates if moved by 10 meters (adjust as needed)
-      // - timeInterval: minimum time between updates (optional, useful with distanceFilter)
       LocationSettings locationSettings = const LocationSettings(
         accuracy: LocationAccuracy.high,
-        distanceFilter: 10, // meters
-        // timeInterval: 5000, // milliseconds (e.g., minimum 5 seconds between updates)
+        distanceFilter: 10,
       );
 
       _positionStreamSubscription =
@@ -122,22 +105,24 @@ class _MapPageStreamState extends State<MapPageStream> {
                   position.latitude,
                   position.longitude,
                 );
-                _isLoadingLocation =
-                    false; // Once we get the first position, loading is done
+                _isLoadingLocation = false;
+
+                _userLocationMarker = Marker(
+                  markerId: const MarkerId('user_location'),
+                  position: _currentPosition!,
+                  icon: _personIcon ?? BitmapDescriptor.defaultMarker,
+                  anchor: const Offset(0.5, 0.5),
+                );
               });
 
-              // Animate camera to current position for a smooth following effect
               if (_controller.isCompleted) {
                 final GoogleMapController mapController =
                     await _controller.future;
-                // Only animate if the user hasn't manually panned away much,
-                // or if you always want it to follow.
-                // For continuous following, just animate every time.
                 mapController.animateCamera(
                   CameraUpdate.newCameraPosition(
                     CameraPosition(
                       target: _currentPosition!,
-                      zoom: 15.0, // You can adjust the zoom level
+                      zoom: _defaultZoomLevel,
                     ),
                   ),
                 );
@@ -146,32 +131,27 @@ class _MapPageStreamState extends State<MapPageStream> {
             onError: (e) {
               String errorMessage = e.toString();
               if (e is LocationServiceDisabledException) {
-                errorMessage =
-                    'Location services disabled. Please enable them.';
+                errorMessage = 'Location services disabled.';
               } else if (e is PermissionDeniedException) {
-                errorMessage =
-                    'Location permissions denied. Please enable them in app settings.';
+                errorMessage = 'Location permissions denied.';
               }
               debugPrint("Error in location stream: $errorMessage");
               setState(() {
                 _locationAcquisitionError = errorMessage;
                 _isLoadingLocation = false;
-                _currentPosition = null; // Clear position on error
+                _currentPosition = null;
               });
               _showSnackbar(_locationAcquisitionError!, isError: true);
             },
             onDone: () {
               debugPrint("Location stream ended.");
               _showSnackbar("Location tracking stopped.", isError: false);
-              _positionStreamSubscription = null; // Clear the subscription
+              _positionStreamSubscription = null;
             },
-            cancelOnError: true, // Cancel the stream if an error occurs
+            cancelOnError: true,
           );
     } catch (e) {
-      String errorMessage = e.toString();
-      if (e is Exception && errorMessage.startsWith("Exception: ")) {
-        errorMessage = errorMessage.substring("Exception: ".length);
-      }
+      String errorMessage = e.toString().replaceFirst("Exception: ", "");
       debugPrint("Initial location setup error: $errorMessage");
       setState(() {
         _locationAcquisitionError = errorMessage;
@@ -182,23 +162,14 @@ class _MapPageStreamState extends State<MapPageStream> {
     }
   }
 
-  Future<void> _goToTheLake() async {
-    if (!_controller.isCompleted) {
-      _showSnackbar("Map is not ready yet.", isError: true);
-      return;
-    }
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
-        icon: const Icon(Icons.directions_boat),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Track',
+        child: const Icon(Icons.directions_walk),
       ),
     );
   }
@@ -212,27 +183,25 @@ class _MapPageStreamState extends State<MapPageStream> {
       return _buildErrorUI(_locationAcquisitionError!);
     }
 
-    // If _currentPosition is null here, it means we couldn't get a location
-    // and there's no specific error, or the error was cleared and we want a fallback.
-    // In this case, show the map centered on a default location.
     return GoogleMap(
       mapType: MapType.normal,
-      // Use the current position if available, otherwise the default Malaysia center
       initialCameraPosition: _currentPosition != null
-          ? CameraPosition(
-              target: _currentPosition!,
-              zoom: 15.0, // Default zoom when tracking current position
-            )
-          : _kGooglePlex, // Fallback if no current position
+          ? CameraPosition(target: _currentPosition!, zoom: _defaultZoomLevel)
+          : _kGooglePlex,
       onMapCreated: (GoogleMapController controller) {
         if (!_controller.isCompleted) {
           _controller.complete(controller);
         }
       },
-      // These are crucial for the "blue dot" and "my location" button
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      zoomControlsEnabled: true,
+      myLocationEnabled: false, // Disable default blue dot
+      myLocationButtonEnabled: false,
+      zoomControlsEnabled: false,
+      liteModeEnabled: false,
+      mapToolbarEnabled: true,
+      buildingsEnabled: true,
+      trafficEnabled: true,
+      indoorViewEnabled: false,
+      markers: _userLocationMarker != null ? {_userLocationMarker!} : {},
     );
   }
 
@@ -242,7 +211,6 @@ class _MapPageStreamState extends State<MapPageStream> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(
               Icons.location_off,
@@ -265,9 +233,7 @@ class _MapPageStreamState extends State<MapPageStream> {
             ElevatedButton.icon(
               icon: const Icon(Icons.refresh),
               onPressed: () {
-                // Restart location updates when retry is pressed
-                _positionStreamSubscription
-                    ?.cancel(); // Cancel any existing stream
+                _positionStreamSubscription?.cancel();
                 _startLocationUpdates();
               },
               label: const Text('Retry'),
@@ -275,12 +241,10 @@ class _MapPageStreamState extends State<MapPageStream> {
             const SizedBox(height: 20),
             OutlinedButton(
               onPressed: () {
-                // Clear error and try to show the default map
                 setState(() {
                   _locationAcquisitionError = null;
-                  _isLoadingLocation =
-                      false; // We are no longer trying to load an initial current location
-                  _currentPosition = null; // Ensure no stale position is used
+                  _isLoadingLocation = false;
+                  _currentPosition = null;
                 });
               },
               child: const Text('Show Default Map'),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_app01/data/notifiers.dart';
+import 'package:tutorial_app01/features/map/map_page_stream.dart';
 import 'package:tutorial_app01/views/pages/home_page.dart';
-import 'package:tutorial_app01/views/pages/map_page_stream.dart';
 import 'package:tutorial_app01/views/pages/profile_page.dart';
 import 'package:tutorial_app01/views/pages/setting_page.dart';
 import 'package:tutorial_app01/views/widgets/navbar_widget.dart';

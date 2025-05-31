@@ -22,4 +22,23 @@
         flutter pub get
         dart run flutter_launcher_icons:main
 
+2. Change package name:
+=======================
+
+    dev_dependencies: 
+    change_app_package_name: ^1.4.0
+    or run this command
+
+    flutter pub add -d change_app_package_name
+    Not migrated to null safety yet? use old version like this
+
+    dev_dependencies: 
+    change_app_package_name: ^1.4.0
+    Update dependencies
+
+    flutter pub get
+    Run this command to change the package name for both platforms.
+
+    dart run change_app_package_name:main com.new.package.name
+
 

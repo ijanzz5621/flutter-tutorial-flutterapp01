@@ -1,4 +1,4 @@
-package com.example.tutorial_app01
+package com.ijglobaltech.miloca
 
 import io.flutter.embedding.android.FlutterActivity
 
